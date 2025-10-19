@@ -14,7 +14,7 @@ const getAllUsers = async (req, res, next) => {
   }
 };
 
-const getUsersIactive = async (req, res, next) => {
+const getUsersInactive = async (req, res, next) => {
   try {
     const [users] = await db.query("SELECT * FROM usuarios WHERE activo=0");
     res.json({
@@ -101,7 +101,7 @@ const activeUser = async (req, res, next) => {
 
 module.exports = {
   getAllUsers,
-  getUsersIactive,
+  getUsersInactive,
   createUser,
   updateUser,
   activeUser,
