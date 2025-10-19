@@ -13,10 +13,12 @@ app.use(express.json());
 const categoryRoute = require("./routes/categoryRoutes");
 const clientRoutes = require("./routes/clientRoute");
 const supplierRoute = require("./routes/supplierRoute");
+const userRoute = require("./routes/userRoute");
 
 app.use("/categories", categoryRoute);
 app.use("/clients", clientRoutes);
 app.use("/supplier", supplierRoute);
+app.use("/user", userRoute);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
