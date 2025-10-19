@@ -11,11 +11,7 @@ const getAllCategories = async (req, res) => {
       message: "Categories retrieved successfully",
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      ok: false,
-      message: "Error retrieving categories",
-    });
+    return next(error);
   }
 };
 
@@ -30,11 +26,7 @@ const getCategoriesInactive = async (req, res) => {
       message: "Inactive categories retrieved successfully",
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      ok: false,
-      message: "Error retrieving inactive categories",
-    });
+    return next(error);
   }
 };
 
@@ -51,11 +43,7 @@ const createCategory = async (req, res) => {
       result,
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      ok: false,
-      message: "Error creating category",
-    });
+    return next(error);
   }
 };
 
@@ -73,11 +61,7 @@ const updateCategory = async (req, res) => {
       result,
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      ok: false,
-      message: "Error updating category",
-    });
+    return next(error);
   }
 };
 
@@ -94,11 +78,7 @@ const categoryInactive = async (req, res) => {
       result,
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      ok: false,
-      message: "Error deactivating category",
-    });
+    return next(error);
   }
 };
 
@@ -115,11 +95,7 @@ const categoryActive = async (req, res) => {
       result,
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      ok: false,
-      message: "Error activating category",
-    });
+    return next(error);
   }
 };
 
