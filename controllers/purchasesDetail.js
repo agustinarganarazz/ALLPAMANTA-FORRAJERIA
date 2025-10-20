@@ -75,14 +75,6 @@ const getPurchaseDetailsByPurchaseId = async (req, res, next) => {
   }
 };
 
-module.exports = {
-  getAllPurchaseDetails,
-  getPurchaseDetailsByPurchaseId,
-  createPurchaseDetail,
-  updatePurchaseDetail,
-  deletePurchaseDetail,
-};
-
 // Crear un detalle de compra
 const createPurchaseDetail = async (req, res, next) => {
   try {

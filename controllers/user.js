@@ -51,7 +51,7 @@ const updateUser = async (req, res, next) => {
     const { name, email, password, rol, active } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
     const [result] = await db.execute(
-      "UPDATE proveedores SET nombre=? , email=? , contraseña=?, rol=?, activo=? WHERE id_proveedor=?",
+      "UPDATE usuarios SET nombre=? , email=? , contraseña=?, rol=?, activo=? WHERE id_usuario=?",
       [name, email, hashedPassword, rol, active, id]
     );
     res.json({
@@ -68,7 +68,7 @@ const inactiveUser = async (req, res, next) => {
   try {
     const { id } = req.params;
     const [result] = await db.execute(
-      "UPDATE proveedores SET activo=0 WHERE id_proveedor=?",
+      "UPDATE usuarios SET activo=0 WHERE id_usuario=?",
       [id]
     );
     res.json({
@@ -85,7 +85,7 @@ const activeUser = async (req, res, next) => {
   try {
     const { id } = req.params;
     const [result] = await db.execute(
-      "UPDATE proveedores SET activo=1 WHERE id_proveedor=?",
+      "UPDATE usuarios SET activo=1 WHERE id_usuarios=?",
       [id]
     );
     res.json({

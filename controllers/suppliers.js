@@ -22,7 +22,7 @@ const getSuppliersInactive = async (req, res, next) => {
     );
     res.json({
       ok: true,
-      clients,
+      suppliers,
       message: "GET Suppliers Inactive",
     });
   } catch (error) {
@@ -32,7 +32,7 @@ const getSuppliersInactive = async (req, res, next) => {
 
 const createSuppliers = async (req, res, next) => {
   try {
-    const [name, telephone, email, direction, active] = req.body;
+    const {name, telephone, email, direction, active} = req.body;
     const [result] = await db.execute(
       "INSERT INTO proveedores(nombre,telefono,email,direccion,activo) VALUES(?,?,?,?,?)",
       [name, telephone, email, direction, active]
