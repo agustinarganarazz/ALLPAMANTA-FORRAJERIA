@@ -1,6 +1,6 @@
 const db = require("../database/config");
 
-const getAllCategories = async (req, res) => {
+const getAllCategories = async (req, res , next) => {
   try {
     const [categories] = await db.query(
       "SELECT * FROM categorias WHERE activo = 1"
@@ -30,7 +30,7 @@ const getCategoriesInactive = async (req, res) => {
   }
 };
 
-const createCategory = async (req, res) => {
+const createCategory = async (req, res, next) => {
   try {
     const { name } = req.body;
     const [result] = await db.execute(
@@ -47,7 +47,7 @@ const createCategory = async (req, res) => {
   }
 };
 
-const updateCategory = async (req, res) => {
+const updateCategory = async (req, res,next ) => {
   try {
     const { id } = req.params;
     const { name, active } = req.body;
@@ -65,7 +65,7 @@ const updateCategory = async (req, res) => {
   }
 };
 
-const categoryInactive = async (req, res) => {
+const categoryInactive = async (req, res , next) => {
   try {
     const { id } = req.params;
     const [result] = await db.execute(
@@ -82,7 +82,7 @@ const categoryInactive = async (req, res) => {
   }
 };
 
-const categoryActive = async (req, res) => {
+const categoryActive = async (req, res , next) => {
   try {
     const { id } = req.params;
     const [result] = await db.execute(

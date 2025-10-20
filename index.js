@@ -17,6 +17,7 @@ const userRoute = require("./routes/userRoute");
 const productRoute = require("./routes/productRoute");
 const authRoute = require("./routes/authRoute");
 const presentationRoute = require("./routes/presentationRoute");
+const purchaseRoute = require("./routes/purschasesRoute");
 
 app.use("/categories", categoryRoute);
 app.use("/clients", clientRoutes);
@@ -25,6 +26,7 @@ app.use("/users", userRoute);
 app.use("/products", productRoute);
 app.use("/auth", authRoute);
 app.use("/presentations", presentationRoute);
+app.use("/purchases", purchaseRoute);
 
 app.use((err, req, res, next) => {
   console.error("Error:", err);

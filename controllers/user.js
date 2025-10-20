@@ -32,9 +32,8 @@ const createUser = async (req, res, next) => {
     const { name, email, password, rol, active } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
     const [result] = await db.execute(
-      "INSERT INTO usuarios (nomnbre,email,contraseña,rol,activo) VALUES (?,?,?,?,?)"[
-        (name, email, hashedPassword, rol, active)
-      ]
+      "INSERT INTO usuarios (nombre,email,contraseña,rol,activo) VALUES (?,?,?,?,?)",
+      [name, email, hashedPassword, rol, active]
     );
     res.json({
       ok: true,
