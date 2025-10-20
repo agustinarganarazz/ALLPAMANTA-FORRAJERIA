@@ -16,6 +16,7 @@ const supplierRoute = require("./routes/supplierRoute");
 const userRoute = require("./routes/userRoute");
 const productRoute = require("./routes/productRoute");
 const authRoute = require("./routes/authRoute");
+const presentationRoute = require("./routes/presentationRoute");
 
 app.use("/categories", categoryRoute);
 app.use("/clients", clientRoutes);
@@ -23,8 +24,8 @@ app.use("/suppliers", supplierRoute);
 app.use("/users", userRoute);
 app.use("/products", productRoute);
 app.use("/auth", authRoute);
+app.use("/presentations", presentationRoute);
 
-// Middleware de manejo de errores (¡al final!)
 app.use((err, req, res, next) => {
   console.error("Error:", err);
   res.status(500).json({
