@@ -22,17 +22,17 @@ const purchasesDetailRoute = require("./routes/purchaseDetailRoute");
 const salesRoute = require("./routes/salesRoute");
 const salesDetailRoute = require("./routes/salesDetailRoute");
 
-app.use("/categories", categoryRoute);
-app.use("/clients", clientRoutes);
-app.use("/suppliers", supplierRoute);
-app.use("/users", userRoute);
-app.use("/products", productRoute);
-app.use("/auth", authRoute);
-app.use("/presentations", presentationRoute);
-app.use("/purchases", purchaseRoute);
-app.use("/purchasesDetail", purchasesDetailRoute);
-app.use("/sales", salesRoute);
-app.use("/salesDetail", salesDetailRoute);
+app.use("/api/categories", categoryRoute);
+app.use("/api/clients", clientRoutes);
+app.use("/api/suppliers", supplierRoute);
+app.use("/api/users", userRoute);
+app.use("/api/products", productRoute);
+app.use("/api/auth", authRoute);
+app.use("/api/presentations", presentationRoute);
+app.use("/api/purchases", purchaseRoute);
+app.use("/api/purchases-details", purchasesDetailRoute);
+app.use("/api/sales", salesRoute);
+app.use("/api/sales-details", salesDetailRoute);
 
 app.use((err, req, res, next) => {
   console.error("Error:", err);

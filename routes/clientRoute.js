@@ -1,20 +1,20 @@
-const {Router}= require("express");
-const router= Router();
+const { Router } = require("express");
+const router = Router();
 
 const {
-  getAllCategories,
-  createCategory,
-  getCategoriesInactive,
-  updateCategory,
-  categoryInactive,
-  categoryActive,
-} = require("../controllers/category");
+  getAllClients,
+  getClientsInactive,
+  createClient,
+  updateClient,
+  clientInactive,
+  clientActive,
+} = require("../controllers/client");
 
-router.get("/", getAllCategories);
-router.post("/", createCategory);
-router.get("/inactive", getCategoriesInactive);
-router.put("/:id", updateCategory);
-router.put("/:id/deactivate", categoryInactive);
-router.put("/:id/activate", categoryActive);
+router.get("/", getAllClients);
+router.post("/", createClient);
+router.get("/inactive", getClientsInactive);
+router.put("/:id", updateClient);
+router.put("/:id/deactivate", clientInactive);
+router.put("/:id/activate", clientActive);
 
-module.exports= router;
+module.exports = router;
