@@ -8,10 +8,11 @@ const {
   deletePurchase,
 } = require("../controllers/purchases");
 
-router.get("/", getAllPurchases);
-router.get("/:id", getPurchaseById);
-router.post("/", createPurchase);
-router.put("/:id", updatePurchase);
-router.delete("/:id", deletePurchase);
+// Rutas para compras
+router.get("/", getAllPurchases); // Obtener todas las compras
+router.get("/:id", getPurchaseById); // Obtener una compra por ID
+router.post("/", createPurchase); // Crear nueva compra
+router.put("/:id", updatePurchase); // Actualizar compra por ID
+router.delete("/:id", deletePurchase); // Eliminar compra por ID
 
 module.exports = router;

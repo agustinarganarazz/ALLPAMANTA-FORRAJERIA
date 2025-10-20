@@ -1,147 +1,196 @@
 const db = require("../database/config");
 
-// Obtener todos los detalles de compras
-const getAllDetalleCompras = async (req, res, next) => {
+// Obtener todos los detalles de compras con info de producto y compra
+const getAllPurchaseDetails = async (req, res, next) => {
   try {
-    const [detalles] = await db.query("SELECT * FROM detalle_compras");
+    const [details] = await db.query(`
+      SELECT
+        dc.id_detalle_compra,
+        dc.id_compra,
+        c.fecha AS fecha_compra,
+        c.id_proveedor,
+        dc.id_producto,
+        p.nombre AS nombre_producto,
+        p.descripcion AS descripcion_producto,
+        dc.cantidad,
+        dc.precio_unitario,
+        dc.subtotal
+      FROM detalle_compras dc
+      INNER JOIN compras c ON dc.id_compra = c.id_compra
+      INNER JOIN productos p ON dc.id_producto = p.id_producto
+      ORDER BY dc.id_detalle_compra DESC
+    `);
+
     res.json({
       ok: true,
-      detalles,
-      status: 200,
+      details,
+      message:
+        "Purchase details with product and purchase info retrieved successfully",
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
-// Obtener detalle de compra por id
-const getDetalleCompraById = async (req, res, next) => {
+const getPurchaseDetailsByPurchaseId = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const [detalle] = await db.query(
-      "SELECT * FROM detalle_compras WHERE id_detalle_compra = ?",
-      [id]
-    );
-    if (detalle.length === 0) {
-      return res.status(404).json({
+
+    if (!id) {
+      return res.status(400).json({
         ok: false,
-        message: "Detalle de compra no encontrado",
+        message: "id_compra is required",
       });
     }
+
+    const [details] = await db.query(
+      `
+      SELECT
+        dc.id_detalle_compra,
+        dc.id_compra,
+        c.fecha AS fecha_compra,
+        c.id_proveedor,
+        dc.id_producto,
+        p.nombre AS nombre_producto,
+        p.descripcion AS descripcion_producto,
+        dc.cantidad,
+        dc.precio_unitario,
+        dc.subtotal
+      FROM detalle_compras dc
+      INNER JOIN compras c ON dc.id_compra = c.id_compra
+      INNER JOIN productos p ON dc.id_producto = p.id_producto
+      WHERE dc.id_compra = ?
+      ORDER BY dc.id_detalle_compra ASC
+    `,
+      [id]
+    );
+
     res.json({
       ok: true,
-      detalle: detalle[0],
-      status: 200,
+      details,
+      message: `Purchase details for purchase ID ${id} retrieved successfully`,
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
-// Crear un nuevo detalle de compra
-const createDetalleCompra = async (req, res, next) => {
+module.exports = {
+  getAllPurchaseDetails,
+  getPurchaseDetailsByPurchaseId,
+  createPurchaseDetail,
+  updatePurchaseDetail,
+  deletePurchaseDetail,
+};
+
+// Crear un detalle de compra
+const createPurchaseDetail = async (req, res, next) => {
   try {
     const { id_compra, id_producto, cantidad, precio_unitario } = req.body;
 
-    if (
-      !id_compra ||
-      !id_producto ||
-      cantidad === undefined ||
-      precio_unitario === undefined
-    ) {
+    // Validaciones básicas
+    if (!id_compra || !id_producto) {
+      return res
+        .status(400)
+        .json({ ok: false, message: "id_compra and id_producto are required" });
+    }
+    if (cantidad === undefined || precio_unitario === undefined) {
       return res.status(400).json({
         ok: false,
-        message: "Faltan campos obligatorios",
+        message: "cantidad and precio_unitario are required",
+      });
+    }
+    if (cantidad <= 0 || precio_unitario < 0) {
+      return res.status(400).json({
+        ok: false,
+        message: "cantidad must be > 0 and precio_unitario >= 0",
       });
     }
 
-    const subtotal = cantidad * precio_unitario;
+    const subtotal = parseFloat(cantidad) * parseFloat(precio_unitario);
 
     const [result] = await db.execute(
       "INSERT INTO detalle_compras (id_compra, id_producto, cantidad, precio_unitario, subtotal) VALUES (?, ?, ?, ?, ?)",
       [id_compra, id_producto, cantidad, precio_unitario, subtotal]
     );
 
-    res.status(201).json({
+    res.json({
       ok: true,
-      message: "Detalle de compra creado",
-      id_detalle_compra: result.insertId,
+      message: "Purchase detail created successfully",
+      result,
+      calculatedSubtotal: subtotal,
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
 // Actualizar un detalle de compra
-const updateDetalleCompra = async (req, res, next) => {
+const updatePurchaseDetail = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { id_compra, id_producto, cantidad, precio_unitario } = req.body;
 
-    if (
-      !id_compra ||
-      !id_producto ||
-      cantidad === undefined ||
-      precio_unitario === undefined
-    ) {
+    if (!id_compra || !id_producto) {
+      return res
+        .status(400)
+        .json({ ok: false, message: "id_compra and id_producto are required" });
+    }
+    if (cantidad === undefined || precio_unitario === undefined) {
       return res.status(400).json({
         ok: false,
-        message: "Faltan campos obligatorios",
+        message: "cantidad and precio_unitario are required",
+      });
+    }
+    if (cantidad <= 0 || precio_unitario < 0) {
+      return res.status(400).json({
+        ok: false,
+        message: "cantidad must be > 0 and precio_unitario >= 0",
       });
     }
 
-    const subtotal = cantidad * precio_unitario;
+    const subtotal = parseFloat(cantidad) * parseFloat(precio_unitario);
 
     const [result] = await db.execute(
       "UPDATE detalle_compras SET id_compra = ?, id_producto = ?, cantidad = ?, precio_unitario = ?, subtotal = ? WHERE id_detalle_compra = ?",
       [id_compra, id_producto, cantidad, precio_unitario, subtotal, id]
     );
 
-    if (result.affectedRows === 0) {
-      return res.status(404).json({
-        ok: false,
-        message: "Detalle de compra no encontrado",
-      });
-    }
-
     res.json({
       ok: true,
-      message: "Detalle de compra actualizado",
+      message: "Purchase detail updated successfully",
+      result,
+      calculatedSubtotal: subtotal,
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
-// Eliminar un detalle de compra
-const deleteDetalleCompra = async (req, res, next) => {
+// Borrar un detalle de compra
+const deletePurchaseDetail = async (req, res, next) => {
   try {
     const { id } = req.params;
+
     const [result] = await db.execute(
       "DELETE FROM detalle_compras WHERE id_detalle_compra = ?",
       [id]
     );
 
-    if (result.affectedRows === 0) {
-      return res.status(404).json({
-        ok: false,
-        message: "Detalle de compra no encontrado",
-      });
-    }
-
     res.json({
       ok: true,
-      message: "Detalle de compra eliminado",
+      message: "Purchase detail deleted successfully",
+      result,
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
 module.exports = {
-  getAllDetalleCompras,
-  getDetalleCompraById,
-  createDetalleCompra,
-  updateDetalleCompra,
-  deleteDetalleCompra,
+  getAllPurchaseDetails,
+  createPurchaseDetail,
+  updatePurchaseDetail,
+  deletePurchaseDetail,
+  getPurchaseDetailsByPurchaseId,
 };

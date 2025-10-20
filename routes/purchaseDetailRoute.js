@@ -1,27 +1,27 @@
-// routes/detalle_compras.js
-const express = require("express");
-const router = express.Router();
+const { Router } = require("express");
+const router = Router();
+
 const {
-  getAllDetalleCompras,
-  getDetalleCompraById,
-  createDetalleCompra,
-  updateDetalleCompra,
-  deleteDetalleCompra,
-} = require("../controllers/purchasesDetail"); // ajustá nombre si lo guardaste distinto
+  getAllPurchaseDetails,
+  getPurchaseDetailsByPurchaseId,
+  createPurchaseDetail,
+  updatePurchaseDetail,
+  deletePurchaseDetail,
+} = require("../controllers/purchasesDetail");
 
-// GET /api/detalle_compras
-router.get("/", getAllDetalleCompras);
+// Obtener todos los detalles de compras con info de productos y compras
+router.get("/", getAllPurchaseDetails);
 
-// GET /api/detalle_compras/:id
-router.get("/:id", getDetalleCompraById);
+// Obtener detalles de una compra específica
+router.get("/purchase/:id", getPurchaseDetailsByPurchaseId);
 
-// POST /api/detalle_compras
-router.post("/", createDetalleCompra);
+// Crear un detalle de compra (subtotal calculado automáticamente)
+router.post("/", createPurchaseDetail);
 
-// PUT /api/detalle_compras/:id
-router.put("/:id", updateDetalleCompra);
+// Actualizar un detalle de compra (subtotal recalculado automáticamente)
+router.put("/:id", updatePurchaseDetail);
 
-// DELETE /api/detalle_compras/:id
-router.delete("/:id", deleteDetalleCompra);
+// Borrar un detalle de compra
+router.delete("/:id", deletePurchaseDetail);
 
 module.exports = router;
