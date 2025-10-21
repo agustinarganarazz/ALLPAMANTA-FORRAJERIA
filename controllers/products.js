@@ -35,20 +35,38 @@ const getProductsInactive = async (req, res, next) => {
 // Crear nuevo producto
 const createProduct = async (req, res, next) => {
   try {
-    const { name, id_categoria, id_proveedor, base_unit, description, active } =
-      req.body;
+    let {
+      name,
+      id_categoria,
+      id_proveedor,
+      base_unit,
+      description,
+      active,
+      stock_total,
+    } = req.body;
+
+    // Validaciones básicas
+    if (!name || !id_categoria || !id_proveedor || !base_unit) {
+      return res.status(400).json({
+        ok: false,
+        message: "Nombre, categoría, proveedor y unidad base son obligatorios",
+      });
+    }
+
+    stock_total = stock_total !== undefined ? stock_total : 0; // valor por defecto
+    active = active !== undefined ? active : 1; // activo por defecto
 
     const [result] = await db.execute(
       `INSERT INTO productos
-      (nombre, id_categoria, id_proveedor, unidad_base, stock_total, descripcion, activo)
-      VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        (nombre, id_categoria, id_proveedor, unidad_base, stock_total, descripcion, activo)
+        VALUES (?, ?, ?, ?, ?, ?, ?)`,
       [
         name,
         id_categoria,
         id_proveedor,
         base_unit,
         stock_total,
-        description,
+        description || "",
         active,
       ]
     );
@@ -56,9 +74,10 @@ const createProduct = async (req, res, next) => {
     res.json({
       ok: true,
       result,
-      message: "Product created successfully",
+      message: "Producto creado correctamente",
     });
   } catch (error) {
+    console.error(error);
     return next(error);
   }
 };
