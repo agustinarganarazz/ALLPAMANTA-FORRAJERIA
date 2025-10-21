@@ -18,7 +18,7 @@ const getAllSuppliers = async (req, res, next) => {
 const getSuppliersInactive = async (req, res, next) => {
   try {
     const [suppliers] = await db.query(
-      "SELECT * FROM proveedores WHERE activo = 1"
+      "SELECT * FROM proveedores WHERE activo = 0"
     );
     res.json({
       ok: true,
@@ -32,15 +32,25 @@ const getSuppliersInactive = async (req, res, next) => {
 
 const createSuppliers = async (req, res, next) => {
   try {
-    const {name, telephone, email, direction, active} = req.body;
+    const { name, email, telephone, direction } = req.body;
+
+    if (!name || !email) {
+      return res.status(400).json({
+        ok: false,
+        message: "Name and email are required",
+      });
+    }
+
     const [result] = await db.execute(
-      "INSERT INTO proveedores(nombre,telefono,email,direccion,activo) VALUES(?,?,?,?,?)",
-      [name, telephone, email, direction, active]
+      `INSERT INTO proveedores (nombre, email, telefono, direccion, activo)
+       VALUES (?, ?, ?, ?, 1)`,
+      [name, email, telephone ?? null, direction ?? null]
     );
+
     res.json({
       ok: true,
       result,
-      message: "Suppliers created successfully",
+      message: "Supplier created successfully",
     });
   } catch (error) {
     return next(error);

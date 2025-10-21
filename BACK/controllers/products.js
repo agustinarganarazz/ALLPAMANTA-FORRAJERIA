@@ -86,8 +86,15 @@ const createProduct = async (req, res, next) => {
 const updateProduct = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { name, id_categoria, id_proveedor, base_unit, description, active } =
-      req.body;
+    const {
+      name,
+      id_categoria,
+      id_proveedor,
+      base_unit,
+      stock_total = 0,
+      description = "",
+      active = 1,
+    } = req.body;
 
     const [result] = await db.execute(
       `UPDATE productos

@@ -1,123 +1,188 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { createProduct, updateProduct } from "../api/products";
+import { getAllCategories } from "../api/categories";
+import { getAllSuppliers } from "../api/suppliers";
 import toast from "react-hot-toast";
 
-const ProductForm = ({ onSubmit, categories = [], suppliers = [] }) => {
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
-  const [id_categoria, setIdCategoria] = useState("");
-  const [id_proveedor, setIdProveedor] = useState("");
-  const [base_unit, setBaseUnit] = useState("");
-  const [stock_total, setStockTotal] = useState(0);
-  const [description, setDescription] = useState("");
+const ProductForm = ({ product = null, onClose, onSave }) => {
+  const [formData, setFormData] = useState({
+    name: "",
+    categoryId: "",
+    supplierId: "",
+    baseUnit: "u",
+    stockTotal: 0,
+    description: "",
+    active: 1,
+  });
 
-  const handleSubmit = (e) => {
+  const [categories, setCategories] = useState([]);
+  const [suppliers, setSuppliers] = useState([]);
+
+  // Cargar categorías y proveedores
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const categoriesRes = await getAllCategories();
+        setCategories(categoriesRes.data.categories || []);
+        const suppliersRes = await getAllSuppliers();
+        setSuppliers(suppliersRes.data.suppliers || []);
+      } catch (err) {
+        console.error(err);
+        toast.error("Error loading categories or suppliers");
+      }
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (product) {
+      setFormData({
+        name: product.nombre,
+        categoryId: product.id_categoria,
+        supplierId: product.id_proveedor,
+        baseUnit: product.unidad_base,
+        stockTotal: product.stock_total,
+        description: product.descripcion,
+        active: product.activo,
+      });
+    }
+  }, [product]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!name || !id_categoria || !id_proveedor || !base_unit) {
-      toast.error(
-        "Nombre, categoría, proveedor y unidad base son obligatorios"
-      );
-      return;
+    if (
+      !formData.name ||
+      !formData.categoryId ||
+      !formData.supplierId ||
+      !formData.baseUnit
+    ) {
+      return toast.error("Name, category, supplier and base unit are required");
     }
 
-    onSubmit({
-      name,
-      price: parseFloat(price) || 0,
-      id_categoria,
-      id_proveedor,
-      base_unit,
-      stock_total: parseFloat(stock_total) || 0,
-      description,
-      active: 1,
-    });
+    const payload = {
+      name: formData.name,
+      id_categoria: formData.categoryId,
+      id_proveedor: formData.supplierId,
+      base_unit: formData.baseUnit,
+      stock_total: formData.stockTotal ?? 0,
+      description: formData.description,
+      active: formData.active ?? 1,
+    };
 
-    // limpiar inputs
-    setName("");
-    setPrice("");
-    setIdCategoria("");
-    setIdProveedor("");
-    setBaseUnit("");
-    setStockTotal(0);
-    setDescription("");
+    try {
+      if (product) {
+        await updateProduct(product.id_producto, payload);
+      } else {
+        await createProduct(payload);
+      }
+
+      toast.success("Product saved successfully");
+      onSave();
+      onClose();
+    } catch (err) {
+      console.error("Error saving product:", err);
+      toast.error(err.response?.data?.message || "Network or server error");
+    }
   };
 
   return (
-    <div className="max-w-md mx-auto mt-6 p-6 bg-yellow-50 border-2 border-yellow-400 rounded-lg shadow-md">
-      <h2 className="text-2xl font-semibold text-yellow-800 mb-4">
-        Nuevo Producto
+    <form
+      onSubmit={handleSubmit}
+      className="relative bg-gray-800 text-white p-6 rounded-lg shadow-lg w-full max-w-md z-50"
+    >
+      <h2 className="text-2xl font-bold mb-4">
+        {product ? "Edit Product" : "New Product"}
       </h2>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Nombre del producto"
-          className="px-4 py-2 border border-yellow-400 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-300 text-brown-900"
-          required
-        />
-        <input
-          type="number"
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
-          placeholder="Precio"
-          step="0.01"
-          className="px-4 py-2 border border-yellow-400 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-300 text-brown-900"
-        />
-        <select
-          value={id_categoria}
-          onChange={(e) => setIdCategoria(e.target.value)}
-          className="px-4 py-2 border border-yellow-400 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-300 text-brown-900"
-          required
+
+      <input
+        name="name"
+        value={formData.name}
+        onChange={handleChange}
+        placeholder="Name"
+        className="w-full mb-3 p-2 rounded bg-gray-700 placeholder-gray-300"
+        required
+      />
+
+      <select
+        name="categoryId"
+        value={formData.categoryId}
+        onChange={handleChange}
+        className="w-full mb-3 p-2 rounded bg-gray-700"
+        required
+      >
+        <option value="">Select category</option>
+        {categories.map((cat) => (
+          <option key={cat.id_categoria} value={cat.id_categoria}>
+            {cat.nombre}
+          </option>
+        ))}
+      </select>
+
+      <select
+        name="supplierId"
+        value={formData.supplierId}
+        onChange={handleChange}
+        className="w-full mb-3 p-2 rounded bg-gray-700"
+        required
+      >
+        <option value="">Select supplier</option>
+        {suppliers.map((sup) => (
+          <option key={sup.id_proveedor} value={sup.id_proveedor}>
+            {sup.nombre}
+          </option>
+        ))}
+      </select>
+
+      <select
+        name="baseUnit"
+        value={formData.baseUnit}
+        onChange={handleChange}
+        className="w-full mb-3 p-2 rounded bg-gray-700"
+        required
+      >
+        <option value="u">Unit</option>
+        <option value="g">Gram</option>
+      </select>
+
+      <input
+        type="number"
+        name="stockTotal"
+        value={formData.stockTotal}
+        onChange={handleChange}
+        placeholder="Stock total"
+        className="w-full mb-3 p-2 rounded bg-gray-700 placeholder-gray-300"
+      />
+
+      <textarea
+        name="description"
+        value={formData.description}
+        onChange={handleChange}
+        placeholder="Description"
+        className="w-full mb-3 p-2 rounded bg-gray-700 placeholder-gray-300"
+      />
+
+      <div className="flex justify-end gap-2">
+        <button
+          type="button"
+          onClick={onClose}
+          className="px-4 py-2 bg-gray-600 rounded hover:bg-gray-500"
         >
-          <option value="">Seleccionar categoría</option>
-          {categories.map((cat) => (
-            <option key={cat.id_categoria} value={cat.id_categoria}>
-              {cat.nombre}
-            </option>
-          ))}
-        </select>
-        <select
-          value={id_proveedor}
-          onChange={(e) => setIdProveedor(e.target.value)}
-          className="px-4 py-2 border border-yellow-400 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-300 text-brown-900"
-          required
-        >
-          <option value="">Seleccionar proveedor</option>
-          {suppliers.map((sup) => (
-            <option key={sup.id_proveedor} value={sup.id_proveedor}>
-              {sup.nombre}
-            </option>
-          ))}
-        </select>
-        <input
-          type="text"
-          value={base_unit}
-          onChange={(e) => setBaseUnit(e.target.value)}
-          placeholder="Unidad base"
-          className="px-4 py-2 border border-yellow-400 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-300 text-brown-900"
-          required
-        />
-        <input
-          type="number"
-          value={stock_total}
-          onChange={(e) => setStockTotal(e.target.value)}
-          placeholder="Stock inicial"
-          className="px-4 py-2 border border-yellow-400 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-300 text-brown-900"
-        />
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder="Descripción"
-          className="px-4 py-2 border border-yellow-400 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-300 text-brown-900"
-        />
+          Cancel
+        </button>
         <button
           type="submit"
-          className="bg-yellow-500 hover:bg-yellow-600 text-brown-900 font-semibold py-2 px-4 rounded-md transition-colors"
+          className="px-4 py-2 bg-green-600 rounded hover:bg-green-500"
         >
-          Guardar
+          Save
         </button>
-      </form>
-    </div>
+      </div>
+    </form>
   );
 };
 

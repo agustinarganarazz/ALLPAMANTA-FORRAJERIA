@@ -2,7 +2,9 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Categories from "./pages/Categories";
 import Layout from "./pages/Layout";
 import { Toaster } from "react-hot-toast";
-
+import Products from "./pages/Products";
+import Users from "./pages/Users";
+import Suppliers from "./pages/Suppliers";
 
 const App = () => {
   return (
@@ -46,9 +48,10 @@ const App = () => {
           />
           <Route path="/categories" element={<Categories />} />
           {/* Agrega tus otras rutas aquí */}
-          {/* <Route path="/products" element={<Products />} /> */}
+          <Route path="/products" element={<Products />} />
+          <Route path="/users" element={<Users />} />
           {/* <Route path="/clients" element={<Clients />} /> */}
-          {/* <Route path="/suppliers" element={<Suppliers />} /> */}
+          <Route path="/suppliers" element={<Suppliers />} />
         </Routes>
       </Layout>
     </Router>

@@ -85,7 +85,7 @@ const activeUser = async (req, res, next) => {
   try {
     const { id } = req.params;
     const [result] = await db.execute(
-      "UPDATE usuarios SET activo=1 WHERE id_usuarios=?",
+      "UPDATE usuarios SET activo=1 WHERE id_usuario=?",
       [id]
     );
     res.json({
