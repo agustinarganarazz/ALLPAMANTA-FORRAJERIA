@@ -1,0 +1,105 @@
+# =========================
+# Sistema operativo
+# =========================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+ehthumbs.db
+Icon?
+ehthumbs_vista.db
+
+# Linux
+*~
+.nfs*
+
+# =========================
+# Node.js y paquetes
+# =========================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+yarn.lock
+.pnpm-debug.log
+
+# =========================
+# Archivos de entorno (sensibles)
+# =========================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.backup
+.env.docker
+.env.*.docker
+
+# =========================
+# React / Frontend builds
+# =========================
+build/
+dist/
+.next/
+out/
+.cache/
+public/build/
+*.html.gz
+*.js.map
+*.css.map
+
+# =========================
+# Logs
+# =========================
+logs/
+*.log
+*.log.*
+*.out
+*.err
+npm-debug.log*
+
+# =========================
+# IDEs y editores
+# =========================
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+*.code-workspace
+*.iml
+
+# =========================
+# Sistemas de control de versiones temporales
+# =========================
+*.orig
+*.rej
+*.patch
+
+# =========================
+# Archivos temporales / swap
+# =========================
+*.tmp
+*.swp
+*.swo
+*.bak
+*.old
+*.save
+*.~*
+
+# =========================
+# Cachés / compilación
+# =========================
+.cache/
+.tmp/
+dist/
+*.tsbuildinfo
+*.next/cache
+/.parcel-cache/
+.eslin
