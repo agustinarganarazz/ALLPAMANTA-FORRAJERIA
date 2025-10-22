@@ -8,6 +8,8 @@ const NavBar = () => {
   const navigate = useNavigate();
   const { logout } = useAuth();
 
+  const isLoggedIn = !!localStorage.getItem("token");
+
   const handleLogout = () => {
     logout(); // limpia token y usuario
     localStorage.removeItem("token");
@@ -22,7 +24,7 @@ const NavBar = () => {
     { path: "/clients", label: "Clientes" },
     { path: "/suppliers", label: "Proveedores" },
     { path: "/users", label: "Usuarios" },
-    { path: "/login", label: "Login" },
+    ...(!isLoggedIn ? [{ path: "/login", label: "Login" }] : []),
   ];
 
   const moreLinks = [

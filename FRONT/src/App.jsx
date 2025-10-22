@@ -4,45 +4,39 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import Categories from "./pages/Categories";
-import Layout from "./pages/Layout";
 import { Toaster } from "react-hot-toast";
-import Products from "./pages/Products";
-import Users from "./pages/Users";
-import Suppliers from "./pages/Suppliers";
-import Login from "./pages/Login";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
+
+import Layout from "./pages/Layout";
+import Login from "./pages/Login";
+import Categories from "./pages/Categories";
+import Products from "./pages/Products";
+import Clients from "./pages/Client";
+import Users from "./pages/Users";
+import Suppliers from "./pages/Suppliers";
 
 const App = () => {
   return (
     <AuthProvider>
       <Router>
-        {/* Toast notifications */}
+        {/* Notificaciones */}
         <Toaster
           position="top-right"
           toastOptions={{
             duration: 3000,
-            style: {
-              background: "#363636",
-              color: "#fff",
-            },
+            style: { background: "#363636", color: "#fff" },
             success: {
               duration: 3000,
-              iconTheme: {
-                primary: "#22c55e",
-                secondary: "#fff",
-              },
+              iconTheme: { primary: "#22c55e", secondary: "#fff" },
             },
             error: {
               duration: 4000,
-              iconTheme: {
-                primary: "#ef4444",
-                secondary: "#fff",
-              },
+              iconTheme: { primary: "#ef4444", secondary: "#fff" },
             },
           }}
         />
+
         <Layout>
           <Routes>
             <Route path="/" element={<Navigate to="/login" replace />} />
@@ -64,6 +58,14 @@ const App = () => {
               }
             />
             <Route
+              path="/clients"
+              element={
+                <ProtectedRoute>
+                  <Clients />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/users"
               element={
                 <ProtectedRoute adminOnly>
@@ -71,7 +73,6 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
-            {/* <Route path="/clients" element={<Clients />} /> */}
             <Route
               path="/suppliers"
               element={

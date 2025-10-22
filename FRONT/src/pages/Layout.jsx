@@ -1,13 +1,15 @@
+import { Outlet, useLocation } from "react-router-dom";
 import NavBar from "../components/NavBar";
 
-
 const Layout = ({ children }) => {
+  const location = useLocation();
+  const hideNavbar = location.pathname === "/login";
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <NavBar />
-      {/* Padding top de 16 (64px) para compensar el navbar fixed de h-16 */}
-      <main className="pt-16">{children}</main>
-    </div>
+    <>
+      {!hideNavbar && <NavBar />}
+      <main className="pt-16">{children ? children : <Outlet />}</main>
+    </>
   );
 };
 
