@@ -13,6 +13,7 @@ const NavBar = () => {
     { path: "/clients", label: "Clientes" },
     { path: "/suppliers", label: "Proveedores" },
     { path: "/users", label: "Usuarios" },
+    { path: "/login", label: "Login" }
   ];
 
   const moreLinks = [
