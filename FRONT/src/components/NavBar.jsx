@@ -24,6 +24,7 @@ const NavBar = () => {
     { path: "/clients", label: "Clientes" },
     { path: "/suppliers", label: "Proveedores" },
     { path: "/users", label: "Usuarios" },
+    { path: "/presentations", label: "Presentaciones" },
     ...(!isLoggedIn ? [{ path: "/login", label: "Login" }] : []),
   ];
 

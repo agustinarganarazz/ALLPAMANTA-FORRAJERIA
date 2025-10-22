@@ -15,6 +15,7 @@ import Products from "./pages/Products";
 import Clients from "./pages/Client";
 import Users from "./pages/Users";
 import Suppliers from "./pages/Suppliers";
+import Presentations from "./pages/Presentations";
 
 const App = () => {
   return (
@@ -54,6 +55,14 @@ const App = () => {
               element={
                 <ProtectedRoute>
                   <Products />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/presentations"
+              element={
+                <ProtectedRoute>
+                  <Presentations />
                 </ProtectedRoute>
               }
             />
