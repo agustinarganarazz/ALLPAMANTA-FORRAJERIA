@@ -1,10 +1,19 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useAuth } from "../context/AuthContext";
 
 const NavBar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { logout } = useAuth();
 
+  const handleLogout = () => {
+    logout(); // limpia token y usuario
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/login");
+  };
   const isActive = (path) => location.pathname === path;
 
   const navLinks = [
@@ -13,7 +22,7 @@ const NavBar = () => {
     { path: "/clients", label: "Clientes" },
     { path: "/suppliers", label: "Proveedores" },
     { path: "/users", label: "Usuarios" },
-    { path: "/login", label: "Login" }
+    { path: "/login", label: "Login" },
   ];
 
   const moreLinks = [
@@ -135,14 +144,12 @@ const NavBar = () => {
                       >
                         Mi Perfil
                       </Link>
-                      <Link
-                        to="/settings"
-                        className="block px-4 py-2.5 text-slate-300 hover:text-white hover:bg-slate-800/50 font-medium transition-colors"
-                      >
-                        Configuración
-                      </Link>
+
                       <hr className="border-slate-700/50 my-2" />
-                      <button className="w-full text-left px-4 py-2.5 text-red-400 hover:text-red-300 hover:bg-slate-800/50 font-medium transition-colors">
+                      <button
+                        onClick={handleLogout}
+                        className="w-full text-left px-4 py-2.5 text-red-400 hover:text-red-300 hover:bg-slate-800/50 font-medium transition-colors"
+                      >
                         Cerrar Sesión
                       </button>
                     </div>
@@ -236,7 +243,10 @@ const NavBar = () => {
                 >
                   Mi Perfil
                 </Link>
-                <button className="w-full text-left px-4 py-3 rounded-lg text-red-400 hover:text-red-300 hover:bg-slate-800/50 font-medium transition-all duration-200">
+                <button
+                  onClick={handleLogout}
+                  className="w-full text-left px-4 py-3 rounded-lg text-red-400 hover:text-red-300 hover:bg-slate-800/50 font-medium transition-all duration-200"
+                >
                   Cerrar Sesión
                 </button>
               </div>
