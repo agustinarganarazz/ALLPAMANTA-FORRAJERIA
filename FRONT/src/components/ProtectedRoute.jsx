@@ -23,7 +23,7 @@ const ProtectedRoute = ({ children, adminOnly = false }) => {
 
   // Requiere admin pero no lo es - redirigir
   if (adminOnly && !isAdmin) {
-    return <Navigate to="/sales" replace />;
+    return <Navigate to="/categories" replace />;
   }
 
   return children;

@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import Categories from "./pages/Categories";
 import Layout from "./pages/Layout";
 import { Toaster } from "react-hot-toast";
@@ -40,6 +45,7 @@ const App = () => {
         />
         <Layout>
           <Routes>
+            <Route path="/" element={<Navigate to="/login" replace />} />
             <Route path="/login" element={<Login />} />
             <Route
               path="/categories"
@@ -74,6 +80,7 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
+            <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>
         </Layout>
       </Router>
