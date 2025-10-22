@@ -62,6 +62,8 @@ const purchaseRoute = require("./routes/purschasesRoute");
 const purchasesDetailRoute = require("./routes/purchaseDetailRoute");
 const salesRoute = require("./routes/salesRoute");
 const salesDetailRoute = require("./routes/salesDetailRoute");
+const registerSaleRoute = require("./routes/registerSaleRoute");
+
 
 app.use("/api/categories", categoryRoute);
 app.use("/api/clients", clientRoutes);
@@ -74,6 +76,7 @@ app.use("/api/purchases", purchaseRoute);
 app.use("/api/purchases-details", purchasesDetailRoute);
 app.use("/api/sales", salesRoute);
 app.use("/api/sales-details", salesDetailRoute);
+app.use("/api/register-sale", registerSaleRoute);
 
 // ========================================
 // MANEJO DE RUTAS NO ENCONTRADAS (404)
