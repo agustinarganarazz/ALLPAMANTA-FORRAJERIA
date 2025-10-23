@@ -146,18 +146,18 @@ const ProductForm = ({ product = null, onClose, onSave }) => {
         className="w-full mb-3 p-2 rounded bg-gray-700"
         required
       >
-        <option value="u">Unit</option>
-        <option value="g">Gram</option>
+        <option value="u">Unidad</option>
+        <option value="g">Kg</option>
       </select>
 
-      <input
+      {/* <input
         type="number"
         name="stockTotal"
         value={formData.stockTotal}
         onChange={handleChange}
         placeholder="Stock total"
         className="w-full mb-3 p-2 rounded bg-gray-700 placeholder-gray-300"
-      />
+      /> */}
 
       <textarea
         name="description"

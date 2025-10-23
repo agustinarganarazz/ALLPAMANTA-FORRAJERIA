@@ -7,7 +7,6 @@ import {
 import { Toaster } from "react-hot-toast";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
-
 import Layout from "./pages/Layout";
 import Login from "./pages/Login";
 import Categories from "./pages/Categories";
@@ -16,6 +15,12 @@ import Clients from "./pages/Client";
 import Users from "./pages/Users";
 import Suppliers from "./pages/Suppliers";
 import Presentations from "./pages/Presentations";
+import Sales from "./pages/Sales";
+import NewSale from "./components/NewSale";
+import SaleDetail from "./components/SaleDetail";
+import Purchases from "./pages/Purchases";
+import PurchaseDetail from "./components/PurchaseDetail";
+import NewPurchase from "./components/NewPurchase";
 
 const App = () => {
   return (
@@ -50,11 +55,60 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
+            <Route path="/sales/:id" element={<SaleDetail />} />
             <Route
               path="/products"
               element={
                 <ProtectedRoute>
                   <Products />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/sales"
+              element={
+                <ProtectedRoute>
+                  <Sales />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/sales/new"
+              element={
+                <ProtectedRoute>
+                  <NewSale />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/sales/:id"
+              element={
+                <ProtectedRoute>
+                  <SaleDetail />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/purchases"
+              element={
+                <ProtectedRoute>
+                  <Purchases />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/purchases/new"
+              element={
+                <ProtectedRoute>
+                  <NewPurchase />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/purchases/:id"
+              element={
+                <ProtectedRoute>
+                  <PurchaseDetail />
                 </ProtectedRoute>
               }
             />
